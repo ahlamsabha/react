@@ -1,0 +1,72 @@
+import React from 'react';
+import {Bar} from 'react-chartjs-2'; // npm i chart.js && npm i react-chartjs-2
+import {getUsers} from './DataService'
+
+
+class BarChart extends React.Component {
+  
+     state = {
+        labels: ['ER'  , 'Pre-Operative Room'  , 'Operation Room',
+                 'Recovery Room', 'ICU Unit', 'CCU Unit', 'NICU Unit'],
+        datasets: [
+          {
+            label: 'Average Time In Phase', 
+            backgroundColor: 'rgba(255,161,181)',
+            data: { datasets:[], labels:[] },
+            Users: {
+              userData: []
+          }
+                               
+          }
+               
+        ]
+      }
+      componentDidMount(){
+        getUsers().then(res =>{
+            console.log(res.data)
+            this.setState({
+                dataset: [ {
+        data: res.data
+}]
+            })
+        })
+      }
+      showUsers = () => {
+        const {Users} = this.state
+              return (
+        Users.map((user, i) =>{
+                return(    
+                     <div key={i}>
+                          {user}
+                     </div>
+             )
+        })
+             )
+        }
+            
+  render() {
+    console.log(this.state.Users)
+    return (
+      <div style={{width:'50%',height:'30%'}}>
+        <Bar 
+          data={this.state.dataset}
+          options={{
+            title:{
+              display:true,
+              fontSize:20
+            },
+            legend:{
+              
+              display:true,
+              position:'top',
+              
+            }
+            
+          }}
+        />
+                
+      </div>
+    );
+  }
+}
+export default BarChart;
